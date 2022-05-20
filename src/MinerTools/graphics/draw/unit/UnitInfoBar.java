@@ -46,7 +46,7 @@ public class UnitInfoBar extends UnitDrawer{
         /* Shield Bar */
         var abilities = unit.abilities;
         if(abilities.size > 0){
-            Ability ability = Structs.find(abilities.items, a -> a instanceof ForceFieldAbility);
+            Ability ability = abilities.find(a -> a instanceof ForceFieldAbility);
 
             if(ability instanceof ForceFieldAbility forceFieldAbility){
                 Lines.stroke(healthBarStroke, Pal.shield);

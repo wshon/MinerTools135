@@ -1,11 +1,11 @@
 #the mod name as displayed in-game
-displayName: "MinerTools"
+displayName: "MinerTools V6"
 
 #the internal name of your mod
-name: "miner-tools"
+name: "miner-tools-v6"
 
 #your name
-author: "miner"
+author: "miner, adapter by wshon"
 
 #the fully qualified main class of the mod
 main: "MinerTools.MinerTools"
@@ -19,9 +19,9 @@ version: 1.6.0
 hidden: true
 
 #the minimum game build required to run this mod
-minGameVersion: 135.1
+minGameVersion: 135
 
 #this is a java mod
 java: true
 
-repo: "rlzzj/MinerTools"
+repo: "wshon/MinerToolsV6"

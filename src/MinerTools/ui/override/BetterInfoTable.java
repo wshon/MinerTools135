@@ -32,7 +32,7 @@ import mindustry.world.modules.*;
 import java.lang.reflect.*;
 
 public class BetterInfoTable extends Table implements OverrideUI{
-    private static final Field topTableField, hoverField, wasHoveredField, menuHoverBlockField, nextFlowBuildField;
+    private static final Field topTableField, hoverField, wasHoveredField, menuHoverBlockField;
 
     private static final Seq<BuildBuilder<? extends Block, ? extends Building>> buildBuilders = Seq.with(
         new BuildBuilder<>(block -> block.hasItems){
@@ -105,7 +105,6 @@ public class BetterInfoTable extends Table implements OverrideUI{
         hoverField = MinerUtils.getField(PlacementFragment.class, "hover");
         wasHoveredField = MinerUtils.getField(PlacementFragment.class, "wasHovered");
         menuHoverBlockField = MinerUtils.getField(PlacementFragment.class, "menuHoverBlock");
-        nextFlowBuildField = MinerUtils.getField(PlacementFragment.class, "nextFlowBuild");
 
         /* This class always load after content init*/
         addBars();
@@ -230,11 +229,12 @@ public class BetterInfoTable extends Table implements OverrideUI{
         if(hoverTile != null){
             //if the tile has a building, display it
             if(hoverTile.build != null){
-                return MinerUtils.setValue(nextFlowBuildField, blockFrag, hoverTile.build);
+                hoverTile.build.updateFlow = true;
+                return hoverTile.build;
             }
 
             //if the tile has a drop, display the drop
-            if((hoverTile.drop() != null && hoverTile.block() == Blocks.air) || hoverTile.wallDrop() != null || hoverTile.floor().liquidDrop != null){
+            if(hoverTile.drop() != null || hoverTile.wallDrop() != null){
                 return hoverTile;
             }
         }
