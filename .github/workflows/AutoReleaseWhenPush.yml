@@ -20,14 +20,14 @@ jobs:
       - name: Get short commit hash
         run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: Build DST
+      - name: Build MinerTools
         run: |
           chmod +x gradlew
           ./gradlew deploy
 
       - uses: actions/upload-artifact@v2
         with:
-          name: Dst-byLiplum
+          name: MinerTools-by-wshon
           path: build/libs/*.jar
 
   upload:
@@ -41,7 +41,7 @@ jobs:
 
       - uses: actions/download-artifact@v2
         with:
-          name: Dst-byLiplum
+          name: MinerTools-by-wshon
           path: out
 
       - name: Delete and recreate tag
