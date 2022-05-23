@@ -16,15 +16,17 @@ import mindustry.world.consumers.*;
 
 import java.lang.reflect.*;
 
+import static arc.Core.graphics;
 import static mindustry.Vars.*;
 
 public class PowerInfo{
-    private static final Field graphEntityField;
+    private static final Field lastFrameUpdatedField;
 
+    private static final Seq<Building> tmp = new Seq<>();
     private static final Seq<PowerInfo> teamsInfo = new Seq<>();
 
     static{
-        graphEntityField = MinerUtils.getField(PowerGraph.class, "entity");
+        lastFrameUpdatedField = MinerUtils.getField(PowerGraph.class, "lastFrameUpdated");
     }
 
     public Team team;
@@ -67,9 +69,14 @@ public class PowerInfo{
 
     private void initBuildings(){
         if(team.data().buildings != null){
-            for(Building building : team.data().buildings){
+            tmp.clear();
+
+            team.data().buildings.getObjects(tmp);
+            for(Building building : tmp){
                 addBuild(building);
             }
+
+            tmp.clear();
         }
     }
 
@@ -127,13 +134,7 @@ public class PowerInfo{
         var consSet = consumers.get(building.block);
         var proSet = producers.get(building.block);
 
-        ConsumePower consumePower = building.block.consPower;
-
-        if(consumePower == null){
-            return;
-        }
-
-        if(consSet != null && proSet != null && !consumePower.buffered){
+        if(consSet != null && proSet != null && !building.block.consumes.getPower().buffered){
             consSet.add(building);
             proSet.add(building);
         }else if(consSet != null){
@@ -199,13 +200,7 @@ public class PowerInfo{
     public float getConsPower(Block block){
         float sum = 0f;
         for(Building building : consumers.get(block)){
-            ConsumePower consumePower = building.block.consPower;
-
-            if(consumePower == null){
-                continue;
-            }
-
-            sum += Mathf.num(building.shouldConsume()) * building.power.status * consumePower.usage * 60 * building.timeScale();
+            sum += Mathf.num(building.shouldConsume()) * building.power.status * building.block.consumes.getPower().usage * 60 * building.timeScale();
         }
         return sum;
     }
@@ -233,14 +228,11 @@ public class PowerInfo{
                 continue;
             }
 
-            if(!MinerUtils.<PowerGraphUpdater>getValue(graphEntityField, graph).isAdded()){
+            if(state.isPaused()) MinerUtils.setValue(lastFrameUpdatedField, graph, graphics.getFrameId());
+            if(!(graphics.getFrameId() - MinerUtils.<Long>getValue(lastFrameUpdatedField, graph) < 2L)){
                 graphs.remove(graph);
             }
         }
-    }
-
-    private static ConsumePower getConsumePower(Seq<Consume> builder){
-        return (ConsumePower)builder.find(cons -> cons instanceof ConsumePower);
     }
 
     public static void load(){

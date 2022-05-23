@@ -24,7 +24,7 @@ public class UnitRender extends BaseRender<Unit>{
     @Override
     public void cameraRender(Seq<BaseDrawer<Unit>> validDrawers){
         for(TeamData data : Vars.state.teams.getActive()){
-            var unitTree = data.unitTree;
+            var unitTree = data.tree;
 
             if(unitTree == null) return;
 

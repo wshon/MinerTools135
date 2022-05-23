@@ -14,7 +14,9 @@ public abstract class BaseRender<T extends Position>{
     @SafeVarargs
     public final BaseRender<T> addDrawers(BaseDrawer<T>... drawers){
         for(BaseDrawer<T> drawer : drawers){
-            allGlobalDrawers.addUnique(drawer);
+            if(!allGlobalDrawers.contains(drawer)){
+                allGlobalDrawers.add(drawer);
+            }
         }
         return this;
     }
@@ -22,7 +24,9 @@ public abstract class BaseRender<T extends Position>{
     @SafeVarargs
     public final BaseRender<T> addCameraDrawers(BaseDrawer<T>... drawers){
         for(BaseDrawer<T> drawer : drawers){
-            allCameraDrawers.addUnique(drawer);
+            if(!allCameraDrawers.contains(drawer)){
+                allCameraDrawers.add(drawer);
+            }
         }
 
         return this;

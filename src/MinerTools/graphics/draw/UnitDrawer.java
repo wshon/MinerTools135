@@ -7,7 +7,7 @@ public abstract class UnitDrawer extends BaseDrawer<Unit>{
 
     @Override
     public boolean isValid(Unit unit){
-        return unit.isValid() && !unit.inFogTo(Vars.player.team());
+        return unit.isValid();
     }
 
 }

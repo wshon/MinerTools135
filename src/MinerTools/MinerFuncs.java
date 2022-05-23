@@ -107,7 +107,7 @@ public class MinerFuncs{
         Table t = new Table(Styles.black3);
         t.touchable = Touchable.disabled;
 
-        Seq<UnitType> units = state.rules.bannedUnits.toSeq();
+        Seq<UnitType> units = state.rules.bannedUnits.asArray();
         if(!units.isEmpty()){
             Seq<UnitType> seq;
 
@@ -125,7 +125,7 @@ public class MinerFuncs{
             t.row();
         }
 
-        Seq<Block> blocks = state.rules.bannedBlocks.toSeq();
+        Seq<Block> blocks = state.rules.bannedBlocks.asArray();
         if(!blocks.isEmpty()){
             Seq<Block> seq;
 
@@ -154,7 +154,7 @@ public class MinerFuncs{
         if(!player.unit().canBuild()) return;
 
         int i = 0;
-        for(BlockPlan block : player.team().data().plans){
+        for(BlockPlan block : player.team().data().blocks){
             if(Mathf.len(block.x - player.tileX(), block.y - player.tileY()) >= buildingRange) continue;
             if(++i > 511) break;
             player.unit().addBuild(new BuildPlan(block.x, block.y, block.rotation, content.block(block.block), block.config));
@@ -292,8 +292,8 @@ public class MinerFuncs{
                 int currentPlan = factoryBuild.currentPlan;
                 if(currentPlan == -1) return null;
                 return block.plans.get(currentPlan).requirements;
-            }else{
-                Consume consume = building.block.findConsumer(cons -> cons instanceof ConsumeItems);
+            }else if(building.block.consumes.has(ConsumeType.item)){
+                Consume consume = building.block.consumes.get(ConsumeType.item);
 
                 if(consume instanceof ConsumeItems consumeItems){
                     return consumeItems.items;

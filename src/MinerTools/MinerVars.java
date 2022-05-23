@@ -125,18 +125,18 @@ public class MinerVars{
     }
 
     public static void betterBars(Block block){
-        block.addBar("health", e -> new Bar(
+        block.bars.add("health", e -> new Bar(
         () -> String.format("%.2f", e.health) + "/" + e.maxHealth + "(" + (int)(100 * e.healthf()) + "%" + ")",
         () -> Pal.health, e::healthf).blink(Color.white));
 
         if(block instanceof UnitFactory factory){
-            factory.addBar("progress", (UnitFactoryBuild e) -> new Bar(
+            factory.bars.add("progress", (UnitFactoryBuild e) -> new Bar(
             () -> Core.bundle.get("bar.progress") + "(" + 100 * (int)(e.fraction()) + "%" + ")",
             () -> Pal.ammo, e::fraction));
         }
 
         if(block instanceof Reconstructor reconstructor){
-            reconstructor.addBar("progress", (ReconstructorBuild e) -> new Bar(
+            reconstructor.bars.add("progress", (ReconstructorBuild e) -> new Bar(
             () -> Core.bundle.get("bar.progress") + "(" + 100 * (int)(e.fraction()) + "%" + ")",
             () -> Pal.ammo, e::fraction));
         }
