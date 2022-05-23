@@ -15,6 +15,8 @@ import mindustry.world.*;
 public class BuildRender<T extends Building> extends BaseRender<T>{
     private final Seq<Block> types;
 
+    private final Seq<Building> tmp = new Seq<>();
+
     /* Tiles for render in camera */
     private QuadTree<Tile> tiles;
 
@@ -37,19 +39,18 @@ public class BuildRender<T extends Building> extends BaseRender<T>{
     @Override
     public void globalRender(Seq<BaseDrawer<T>> validDrawers){
         for(TeamData data : Vars.state.teams.getActive()){
-            var buildingTypes = data.buildingTypes;
+            if(data.buildings==null) continue;
 
-            for(Block type : types){
-                var buildings = buildingTypes.get(type);
-
-                if(buildings == null) return;
-
-                for(Building building : buildings){
-                    for(BaseDrawer<T> drawer : validDrawers){
-                        drawer.tryDraw((T)building);
-                    }
+            tmp.clear();
+            data.buildings.getObjects(tmp);
+            for(Building building : tmp){
+                if(!types.contains(building.block())) continue;
+                for(BaseDrawer<T> drawer : validDrawers){
+                    drawer.tryDraw((T)building);
                 }
             }
+
+            tmp.clear();
         }
     }
 
