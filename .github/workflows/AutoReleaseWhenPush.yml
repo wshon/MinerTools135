@@ -1,0 +1,66 @@
+name: Build Push Changes
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set Android SDK tools
+        run: echo "$ANDROID_HOME/build-tools/30.0.3" >> $GITHUB_PATH
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Get short commit hash
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Build MinerTools
+        run: |
+          chmod +x gradlew
+          ./gradlew deploy
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: MinerTools-by-wshon
+          path: build/libs/*.jar
+
+  upload:
+    needs: build
+    if: ${{ startsWith(github.event.head_commit.message,'[AR]') }}
+    runs-on: ubuntu-latest
+    env:
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: MinerTools-by-wshon
+          path: out
+
+      - name: Get version
+        id: version
+        run: echo "::set-output name=version::v$(grep "version:" mod.hjson | cut -d' ' -f 2)"
+      - name: Delete and recreate tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release delete $VERSION --yes || true
+          git push origin :$VERSION || true
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Upload development build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+          TODAY: ${{ steps.date.outputs.date }}
+        run: gh release create $VERSION --title "Auto-release $VERSION on $TODAY" --notes-file "$GITHUB_WORKSPACE/.github/workflows/EveryAutoCommitMessage.md" out/*.jar
