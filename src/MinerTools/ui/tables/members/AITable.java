@@ -44,7 +44,7 @@ public class AITable extends MemberTable{
             buttons.defaults().size(55f);
 
             for(PlayerAI ai : ais){
-                buttons.button(ai.icon, Styles.clearNoneTogglei, 50f, () -> setTarget(ai))
+                buttons.button(ai.icon, Styles.clearTogglePartiali, 50f, () -> setTarget(ai))
                 .checked(b -> target == ai);
             }
         }).right().row();
