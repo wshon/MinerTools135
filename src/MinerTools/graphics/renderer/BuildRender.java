@@ -2,7 +2,6 @@ package MinerTools.graphics.renderer;
 
 import MinerTools.graphics.draw.*;
 import arc.*;
-import arc.func.*;
 import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
@@ -12,17 +11,14 @@ import mindustry.game.Teams.*;
 import mindustry.gen.*;
 import mindustry.world.*;
 
-public class BuildRender<T extends Building> extends BaseRender<T>{
-    private final Seq<Block> types;
+public class BuildRender extends BaseRender<BuildDrawer<?>>{
 
     private final Seq<Building> tmp = new Seq<>();
 
     /* Tiles for render in camera */
-    private QuadTree<Tile> tiles;
+    private static QuadTree<Tile> tiles;
 
-    public BuildRender(Seq<Block> types){
-        this.types = types;
-
+    static {
         Events.on(WorldLoadEvent.class, e -> {
             tiles = new QuadTree<>(Vars.world.getQuadBounds(Tmp.r1));
 
@@ -32,21 +28,16 @@ public class BuildRender<T extends Building> extends BaseRender<T>{
         });
     }
 
-    public BuildRender(Boolf<Block> predicate){
-        this(Vars.content.blocks().select(predicate));
-    }
-
     @Override
-    public void globalRender(Seq<BaseDrawer<T>> validDrawers){
+    public void globalRender(Seq<BuildDrawer<?>> validDrawers){
         for(TeamData data : Vars.state.teams.getActive()){
-            if(data.buildings==null) continue;
+            var buildings = data.buildings;
 
             tmp.clear();
-            data.buildings.getObjects(tmp);
+            buildings.getObjects(tmp);
             for(Building building : tmp){
-                if(!types.contains(building.block())) continue;
-                for(BaseDrawer<T> drawer : validDrawers){
-                    drawer.tryDraw((T)building);
+                for(BuildDrawer<?> drawer : validDrawers){
+                    drawer.tryDraw(building);
                 }
             }
 
@@ -55,13 +46,13 @@ public class BuildRender<T extends Building> extends BaseRender<T>{
     }
 
     @Override
-    public void cameraRender(Seq<BaseDrawer<T>> validDrawers){
+    public void cameraRender(Seq<BuildDrawer<?>> validDrawers){
         tiles.intersect(Core.camera.bounds(Tmp.r1), tile -> {
             Building building = tile.build;
 
-            if(building != null && types.contains(building.block)){
-                for(BaseDrawer<T> drawer : validDrawers){
-                    drawer.tryDraw((T)building);
+            if(building != null){
+                for(BuildDrawer<?> drawer : validDrawers){
+                    drawer.tryDraw(building);
                 }
             }
         });
