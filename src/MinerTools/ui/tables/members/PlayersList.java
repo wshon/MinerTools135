@@ -2,6 +2,7 @@ package MinerTools.ui.tables.members;
 
 import MinerTools.*;
 import MinerTools.ui.*;
+import MinerTools.ui.tables.MembersTable.*;
 import arc.*;
 import arc.math.geom.*;
 import arc.scene.ui.*;
@@ -23,7 +24,7 @@ public class PlayersList extends MemberTable{
     private int lastSize;
     private final Seq<Player> players = new Seq<>();
 
-    private Table playersTable = new Table(black3);
+    private final Table playersTable = new Table(black3);
 
     private Player target;
 
