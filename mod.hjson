@@ -11,7 +11,7 @@ author: "miner, adapter by wshon"
 main: "MinerTools.MinerTools"
 
 #the mod description as seen in the mod dialog
-description: "A java mod for Mindustry."
+description: "A java mod for Mindustry V6."
 
 #the mod version
 version: 1.6.5
