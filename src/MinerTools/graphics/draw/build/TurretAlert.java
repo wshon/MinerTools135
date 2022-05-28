@@ -6,15 +6,17 @@ import arc.graphics.g2d.*;
 import arc.util.*;
 import mindustry.graphics.*;
 import mindustry.world.blocks.defense.turrets.*;
+import mindustry.world.blocks.defense.turrets.BaseTurret.*;
+import mindustry.world.blocks.defense.turrets.TractorBeamTurret.*;
 import mindustry.world.blocks.defense.turrets.Turret.*;
 
 import static mindustry.Vars.*;
 
-public class TurretAlert extends BuildDrawer<TurretBuild>{
+public class TurretAlert extends BuildDrawer<BaseTurretBuild>{
     public float turretAlertRadius;
 
     public TurretAlert(){
-        super(block -> block instanceof Turret);
+        super(block -> block instanceof BaseTurret);
     }
 
     @Override
@@ -33,17 +35,28 @@ public class TurretAlert extends BuildDrawer<TurretBuild>{
     }
 
     @Override
-    public boolean isValid(TurretBuild turret){
-        Turret block = (Turret)turret.block;
-        return super.isValid(turret) &&
-        (turret.team != player.team()) && // isEnemy
-        (turret.hasAmmo()) && // hasAmmo
-        (player.unit().isFlying() ? block.targetAir : block.targetGround) && // can hit player
-        (turret.within(player, turretAlertRadius + block.range)); // within player
+    public boolean isValid(BaseTurretBuild baseTurret){
+        BaseTurret baseBlock = (BaseTurret) baseTurret.block;
+        if (super.isValid(baseTurret) &&
+        (baseTurret.team != player.team()) && // isEnemy
+        (baseTurret.within(player, turretAlertRadius + baseBlock.range))) {
+            if (baseTurret instanceof TurretBuild turret) {
+                Turret block = (Turret) baseBlock;
+                return (turret.hasAmmo()) && // hasAmmo
+                (player.unit().isFlying() ? block.targetAir : block.targetGround) && // can hit player
+                (turret.within(player, turretAlertRadius + block.range)); // within player
+            } else if (baseTurret instanceof TractorBeamBuild turret) {
+                TractorBeamTurret block = (TractorBeamTurret) baseBlock;
+                return (turret.power.status > 0) && // hasPower
+                (player.unit().isFlying() ? block.targetAir : block.targetGround) && // can hit player
+                (turret.within(player, turretAlertRadius + block.range)); // within player
+            }
+        }
+        return false;
     }
 
     @Override
-    protected void draw(TurretBuild turret){
+    protected void draw(BaseTurretBuild turret){
         Draw.z(Layer.overlayUI);
 
         Lines.stroke(1.2f);

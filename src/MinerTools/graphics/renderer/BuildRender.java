@@ -34,7 +34,7 @@ public class BuildRender extends BaseRender<BuildDrawer<?>>{
             var buildings = data.buildings;
 
             tmp.clear();
-            data.buildings.getObjects(tmp);
+            buildings.getObjects(tmp);
             for(Building building : tmp){
                 for(BuildDrawer<?> drawer : validDrawers){
                     drawer.tryDraw(building);
