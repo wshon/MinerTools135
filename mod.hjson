@@ -1,8 +1,8 @@
 #the mod name as displayed in-game
-displayName: "MinerTools V6"
+displayName: "MinerTools V7.135"
 
 #the internal name of your mod
-name: "miner-tools-v6"
+name: "miner-tools-v7-135"
 
 #your name
 author: "miner, adapter by wshon"
@@ -11,7 +11,7 @@ author: "miner, adapter by wshon"
 main: "MinerTools.MinerTools"
 
 #the mod description as seen in the mod dialog
-description: "A java mod for Mindustry V6."
+description: "A java mod for Mindustry V7 135.2"
 
 #the mod version
 version: 1.6.5
@@ -24,4 +24,4 @@ minGameVersion: 135
 #this is a java mod
 java: true
 
-repo: "wshon/MinerToolsV6"
+repo: "wshon/MinerToolsV7.135"

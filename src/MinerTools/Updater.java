@@ -13,7 +13,7 @@ public class Updater{
     private static String repo;
 
     public static void checkUpdate(){
-        mod = mods.locateMod("miner-tools-v6");
+        mod = mods.locateMod("miner-tools-v7-135");
         repo = mod.getRepo();
 
         Http.get(ghApi + "/repos/" + repo + "/releases/latest", res -> {
