@@ -33,6 +33,8 @@ public class BuildRender extends BaseRender<BuildDrawer<?>>{
         for(TeamData data : Vars.state.teams.getActive()){
             var buildings = data.buildings;
 
+            if(buildings == null) continue;
+
             tmp.clear();
             buildings.getObjects(tmp);
             for(Building building : tmp){
