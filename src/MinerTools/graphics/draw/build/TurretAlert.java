@@ -36,23 +36,26 @@ public class TurretAlert extends BuildDrawer<BaseTurretBuild>{
 
     @Override
     public boolean isValid(BaseTurretBuild baseTurret){
-        BaseTurret baseBlock = (BaseTurret) baseTurret.block;
-        if (super.isValid(baseTurret) &&
-        (baseTurret.team != player.team()) && // isEnemy
-        (baseTurret.within(player, turretAlertRadius + baseBlock.range))) {
-            if (baseTurret instanceof TurretBuild turret) {
-                Turret block = (Turret) baseBlock;
-                return (turret.hasAmmo()) && // hasAmmo
-                (player.unit().isFlying() ? block.targetAir : block.targetGround) && // can hit player
-                (turret.within(player, turretAlertRadius + block.range)); // within player
-            } else if (baseTurret instanceof TractorBeamBuild turret) {
-                TractorBeamTurret block = (TractorBeamTurret) baseBlock;
-                return (turret.power.status > 0) && // hasPower
-                (player.unit().isFlying() ? block.targetAir : block.targetGround) && // can hit player
-                (turret.within(player, turretAlertRadius + block.range)); // within player
-            }
+        if(!super.isValid(baseTurret)) return false;
+
+        if(baseTurret.team == player.team()) return false;
+
+        if(!baseTurret.within(player, turretAlertRadius + baseTurret.range())) return false;
+
+        BaseTurret baseBlock = (BaseTurret)baseTurret.block;
+
+        boolean hasAmmo = false, canHitPlayer = false;
+        if(baseTurret instanceof TurretBuild turret){
+            Turret block = (Turret)baseBlock;
+            hasAmmo = turret.hasAmmo();
+            canHitPlayer = player.unit().isFlying() ? block.targetAir : block.targetGround;
+        }else if(baseTurret instanceof TractorBeamBuild turret){
+            TractorBeamTurret block = (TractorBeamTurret)baseBlock;
+            hasAmmo = turret.power.status > 0;
+            canHitPlayer = player.unit().isFlying() ? block.targetAir : block.targetGround;
         }
-        return false;
+
+        return hasAmmo && canHitPlayer;
     }
 
     @Override

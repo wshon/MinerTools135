@@ -10,9 +10,11 @@ import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.*;
 import mindustry.*;
+import mindustry.core.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
+import mindustry.ui.dialogs.SettingsMenuDialog.*;
 import mindustry.ui.dialogs.SettingsMenuDialog.SettingsTable.*;
 import mindustry.world.*;
 import mindustry.world.blocks.distribution.*;
@@ -92,11 +94,17 @@ public class MinerVars{
         Core.settings.put("uiscalechanged", false);
 
         if(index != -1){
+            Vars.ui.settings.graphics.getSettings().add(new Setting("rebuildListener"){
+                @Override
+                public void add(SettingsTable table){
+                    shouldChange[0] = false;
+                }
+            });
+
             Vars.ui.settings.graphics.getSettings().set(index, new SliderSetting("uiscale", 100, 25, 300, 1, s -> {
                 //if the user changed their UI scale, but then put it back, don't consider it 'changed'
                 if(shouldChange[0]){
                     Core.settings.put("uiscalechanged", s != lastUiScale[0]);
-                    Log.info("changed");
                 }else{
                     shouldChange[0] = true;
                 }
@@ -131,13 +139,16 @@ public class MinerVars{
 
         if(block instanceof UnitFactory factory){
             factory.bars.add("progress", (UnitFactoryBuild e) -> new Bar(
-            () -> Core.bundle.get("bar.progress") + "(" + 100 * (int)(e.fraction()) + "%" + ")",
+            () -> {
+                float ticks = e.currentPlan == -1 ? 0 : (1 - e.fraction()) * factory.plans.get(e.currentPlan).time / e.timeScale();
+                return Core.bundle.get("bar.progress") + ":" + UI.formatTime(ticks) + "(" + (int)(100 * e.fraction()) + "%" + ")";
+            },
             () -> Pal.ammo, e::fraction));
         }
 
         if(block instanceof Reconstructor reconstructor){
             reconstructor.bars.add("progress", (ReconstructorBuild e) -> new Bar(
-            () -> Core.bundle.get("bar.progress") + "(" + 100 * (int)(e.fraction()) + "%" + ")",
+            () -> Core.bundle.get("bar.progress") + ":" + UI.formatTime((1 - e.fraction()) * reconstructor.constructTime / e.timeScale()) + "(" + (int)(100 * e.fraction()) + "%" + ")",
             () -> Pal.ammo, e::fraction));
         }
     }

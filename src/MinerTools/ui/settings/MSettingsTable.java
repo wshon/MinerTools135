@@ -66,9 +66,18 @@ public class MSettingsTable extends Table implements Addable{
 
                     drawerCheck(setting, "itemTurretAmmoShow", true);
 
-                    drawerCheck(setting, "constructBuildInfo", true);
-                    drawerCheck(setting, "buildStatus", true);
+                    setting.addCategory("info", info -> {
+                        drawerCheck(info, "buildStatus", true);
+                        drawerCheck(info, "buildHealthBar", true);
+
+                        drawerCheck(info, "constructBuildInfo", true);
+                        drawerCheck(info, "unitBuildInfo", true);
+                    });
+                });
+
+                addCategory("select", setting -> {
                     drawerCheck(setting, "buildSelectInfo", true);
+                    drawerCheck(setting, "itemBridgeLinksShow", true);
                 });
             }
 
@@ -91,7 +100,10 @@ public class MSettingsTable extends Table implements Addable{
 
     private void setup(){
         table(t -> {
-            t.add("MinerToolsSettings").center().row();
+            t.table(table -> {
+                table.add("MinerToolsSettings").center();
+            }).growX().row();
+
             t.image().color(Pal.accent).minWidth(550f).growX();
 
             t.row();
@@ -109,7 +121,7 @@ public class MSettingsTable extends Table implements Addable{
                         }
                     }).grow().checked(b -> show == settingTable);
                 }
-            }).minWidth(70f * settingTables.size).padTop(5f).padBottom(5f);
+            }).minSize(70f * settingTables.size, 48f).padTop(5f).padBottom(5f);
         }).top();
 
         row();
