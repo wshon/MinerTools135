@@ -161,7 +161,7 @@ public class ChatTable extends FloatTable{
                 buttons.defaults().minWidth(115f).growX().top();
 
                 buttons.button("Clear", Icon.refreshSmall, MStyles.clearPartial2t, 45, selectMessages::clear);
-                buttons.button("Copy", Icon.copySmall, MStyles.clearPartial2t, 45, () -> MUI.setClipboardText(selectMessages.toString("\n")));
+                buttons.button("Copy", Icon.copySmall, MStyles.clearPartial2t, 45, () -> setClipboardText(selectMessages.toString("\n")));
             }).top();
 
             t.row();

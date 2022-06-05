@@ -12,7 +12,6 @@ import mindustry.game.Teams.*;
 import mindustry.gen.*;
 import mindustry.world.*;
 import mindustry.world.blocks.power.*;
-import mindustry.world.consumers.*;
 
 import java.lang.reflect.*;
 

@@ -3,7 +3,6 @@ package MinerTools.graphics.draw;
 import MinerTools.*;
 import arc.func.*;
 import arc.struct.*;
-import mindustry.*;
 import mindustry.gen.*;
 import mindustry.world.*;
 

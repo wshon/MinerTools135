@@ -4,7 +4,6 @@ import MinerTools.*;
 import MinerTools.graphics.draw.*;
 import arc.graphics.g2d.*;
 import arc.struct.*;
-import arc.util.*;
 import mindustry.*;
 import mindustry.entities.abilities.*;
 import mindustry.gen.*;

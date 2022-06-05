@@ -293,7 +293,7 @@ public class MinerFuncs{
                 if(currentPlan == -1) return null;
                 return block.plans.get(currentPlan).requirements;
             }else if(building.block.consumes.has(ConsumeType.item)){
-                Consume consume = building.block.consumes.get(ConsumeType.item);
+                Consume consume = building.block.consumes.getItem();
 
                 if(consume instanceof ConsumeItems consumeItems){
                     return consumeItems.items;

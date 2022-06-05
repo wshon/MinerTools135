@@ -138,7 +138,7 @@ public class MinerVars{
         () -> Pal.health, e::healthf).blink(Color.white));
 
         if(block instanceof UnitFactory factory){
-            factory.bars.add("progress", (UnitFactoryBuild e) -> new Bar(
+            block.bars.add("progress", (UnitFactoryBuild e) -> new Bar(
             () -> {
                 float ticks = e.currentPlan == -1 ? 0 : (1 - e.fraction()) * factory.plans.get(e.currentPlan).time / e.timeScale();
                 return Core.bundle.get("bar.progress") + ":" + UI.formatTime(ticks) + "(" + (int)(100 * e.fraction()) + "%" + ")";
@@ -147,7 +147,7 @@ public class MinerVars{
         }
 
         if(block instanceof Reconstructor reconstructor){
-            reconstructor.bars.add("progress", (ReconstructorBuild e) -> new Bar(
+            block.bars.add("progress", (ReconstructorBuild e) -> new Bar(
             () -> Core.bundle.get("bar.progress") + ":" + UI.formatTime((1 - e.fraction()) * reconstructor.constructTime / e.timeScale()) + "(" + (int)(100 * e.fraction()) + "%" + ")",
             () -> Pal.ammo, e::fraction));
         }

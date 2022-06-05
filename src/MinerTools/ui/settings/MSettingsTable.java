@@ -10,7 +10,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.ui.*;
 
-import static mindustry.ui.Styles.clearToggleTransi;
+import static mindustry.ui.Styles.*;
 
 public class MSettingsTable extends Table implements Addable{
     public Seq<MSettingTable> settingTables = new Seq<>();
