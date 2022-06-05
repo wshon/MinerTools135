@@ -16,12 +16,10 @@ public class BuildRender extends BaseRender<BuildDrawer<?>>{
     @Override
     public void globalRender(Seq<BuildDrawer<?>> validDrawers){
         for(TeamData data : Vars.state.teams.getActive()){
-            var buildings = data.buildings;
-
-            if(buildings == null) continue;
+            if(data.buildings == null) continue;
 
             tmp.clear();
-            buildings.getObjects(tmp);
+            data.buildings.getObjects(tmp);
             for(Building building : tmp){
                 for(BuildDrawer<?> drawer : validDrawers){
                     drawer.tryDraw(building);
