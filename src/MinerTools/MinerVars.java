@@ -14,6 +14,7 @@ import mindustry.core.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
+import mindustry.ui.dialogs.SettingsMenuDialog.*;
 import mindustry.ui.dialogs.SettingsMenuDialog.SettingsTable.*;
 import mindustry.world.*;
 import mindustry.world.blocks.distribution.*;
@@ -93,11 +94,17 @@ public class MinerVars{
         Core.settings.put("uiscalechanged", false);
 
         if(index != -1){
+            Vars.ui.settings.graphics.getSettings().add(new Setting("rebuildListener"){
+                @Override
+                public void add(SettingsTable table){
+                    shouldChange[0] = false;
+                }
+            });
+
             Vars.ui.settings.graphics.getSettings().set(index, new SliderSetting("uiscale", 100, 25, 300, 1, s -> {
                 //if the user changed their UI scale, but then put it back, don't consider it 'changed'
                 if(shouldChange[0]){
                     Core.settings.put("uiscalechanged", s != lastUiScale[0]);
-                    Log.info("changed");
                 }else{
                     shouldChange[0] = true;
                 }
